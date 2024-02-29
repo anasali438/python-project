@@ -1,0 +1,56 @@
+import random
+
+class PasswordGenerator:
+    def _init_(self, num_passwords):
+        self.num_passwords = num_passwords
+        self.alphabet = "abcdefghijklmnopqrstuvwxyz"
+
+    def generate_password(self, length):
+        password = ""
+        for _ in range(length):
+            next_letter_index = random.randrange(len(self.alphabet))
+            password += self.alphabet[next_letter_index]
+        
+        password = self.replace_with_number(password)
+        password = self.replace_with_uppercase_letter(password)
+        return password
+
+    def replace_with_number(self, pword):
+        for _ in range(random.randrange(1, 3)):
+            replace_index = random.randrange(len(pword)//2)
+            pword = pword[:replace_index] + str(random.randrange(10)) + pword[replace_index+1:]
+        return pword
+
+    def replace_with_uppercase_letter(self, pword):
+        for _ in range(random.randrange(1, 3)):
+            replace_index = random.randrange(len(pword)//2, len(pword))
+            pword = pword[:replace_index] + pword[replace_index].upper() + pword[replace_index+1:]
+        return pword
+
+    def generate_passwords(self, lengths):
+        passwords = []
+        for length in lengths:
+            passwords.append(self.generate_password(length))
+        return passwords
+
+    def main(self):
+        print("Generating " + str(self.num_passwords) + " passwords")
+        password_lengths = []
+
+        print("Minimum length of password should be 3")
+
+        for i in range(self.num_passwords):
+            length = int(input("Enter the length of Password #" + str(i+1) + " "))
+            if length < 3:
+                length = 3
+            password_lengths.append(length)
+
+        passwords = self.generate_passwords(password_lengths)
+
+        for i, password in enumerate(passwords):
+            print("Password #" + str(i+1) + " = " + password)
+
+if _name_ == "_main_":
+    num_passwords = int(input("How many passwords do you want to generate? "))
+    generator = PasswordGenerator(num_passwords)
+    generator.main()
